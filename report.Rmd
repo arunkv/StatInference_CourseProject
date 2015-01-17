@@ -1,0 +1,43 @@
+---
+title: "Statistical Inference Course Project"
+author: "Arun K Viswanathan"
+date: "January 16th, 2015"
+output: html_document
+---
+
+# Overview
+
+This paper investigates the exponential distribution in R and compares it with 
+the Central Limit Theorem.  
+
+# Simulations
+
+```{r,echo=TRUE}
+lambda <- 0.2    # Lamdba
+n <- 40          # Number of exponentials
+numsim <- 100000 # Number of simulations
+```
+
+We simulate an exponential distribution with `r n` exponentials and lamda of 
+`r lambda`. The simulation is performed `r numsim` times. 
+
+```{r,echo=TRUE}
+mean.theoretical <- 1/lambda
+sd.theoretical <- 1/lambda
+sim <- matrix(rexp(n * numsim, lambda), numsim) 
+means.sim <- apply(sim, 1, mean)
+mean.sim <- mean(means.sim)
+hist(means.sim,
+     main = "Distribution of sample means",
+     xlab = "Means",
+     ylab = "Frequency",
+     col = "lightyellow2")
+abline(v = mean.sim, col = "darkred", lw = 2)
+# TODO: Overlay density function and standard distribution
+```
+
+# Sample Mean versus Theoretical Mean
+
+# Sample Variance versus Theoretical Variance
+
+# Distribution
