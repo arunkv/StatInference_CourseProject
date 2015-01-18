@@ -32,7 +32,8 @@ data <- transform(ToothGrowth, dose = as.factor(dose))
 summary(data)
 ```
 
-The plot below shows the tooth growth ranges for each dosage level.
+The plot below shows the tooth growth ranges for each supplement at each dosage
+level.
 
 ```{r, echo=TRUE}
 library(ggplot2)
