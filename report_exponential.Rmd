@@ -15,7 +15,7 @@ the Central Limit Theorem.
 ```{r,echo=TRUE}
 lambda <- 0.2     # Lamdba
 n <- 40           # Number of exponentials
-numsim <- 1000000 # Number of simulations
+numsim <- 100000  # Number of simulations
 ```
 
 We simulate an exponential distribution using `rexp`, with `r n` exponentials 
