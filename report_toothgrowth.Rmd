@@ -7,7 +7,7 @@ output: pdf_document
 
 # Overview
 
-The report analyzes the ToothGrowth dataset in R.
+This report analyzes the ToothGrowth dataset in R.
 
 # Summary of the Tooth Growth dataset
 
@@ -37,27 +37,84 @@ level.
 
 ```{r, echo=TRUE}
 library(ggplot2)
-g <- ggplot(data, aes(x = supp, y = len, fill = dose)) +
-    geom_boxplot() +
+g <- ggplot(data, aes(x = supp, y = len, fill = dose)) + geom_boxplot() +
     facet_grid(. ~ dose) + 
     ggtitle("Tooth Growth by Supplement Type") +
-    xlab("Supplement") +
-    ylab("Length of Tooth Growth") +
+    xlab("Supplement") + ylab("Length of Tooth Growth") +
     guides(fill = guide_legend(title = "Dose"))
 print(g)
 ```
 
 # Tooth growth analysis by supplement
 
-Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
-State your conclusions and the assumptions needed for your conclusions. 
+Assuming that the tooth growth data is _iid_, the 95% confidence intervals for 
+tooth growth for each supplement can be computed with the code below. The plots 
+show the tooth growth for each supplement as a histogram.
+
+```{r,echo=TRUE}
+conf <- lapply(split(data, data$supp), function(dataForSupp) {
+    lens <- dataForSupp$len
+    mean(lens) + c(-1, 1) * qnorm(0.975) * sd(lens) / sqrt(length(lens))
+    })
+analysis <- lapply(names(conf), function(supp) {
+    lens <- data[data$supp == supp, "len"]    
+    h <- hist(lens, xlim = range(data$len), ylim = range(0, 10),
+              main = paste0("Histogram of tooth growth with ", supp),
+              xlab = "Tooth Growth", ylab = "Frequency", col = "lightyellow2")
+    xfit <- seq(min(lens), max(lens), length = 40) 
+    yfit <- dnorm(xfit, mean = mean(lens), sd = sd(lens)) 
+    yfit <- yfit * diff(h$mids[1:2]) * length(lens) 
+    lines(xfit, yfit, col = "darkgreen", lt = 1, lw = 3)
+    abline(v = mean(lens), col = "darkred", lt = 2, lw = 2)
+    abline(v = conf[[supp]], col = "darkred", lt = 1, lw = 3)
+    axis(1, font = 2, at = conf[[supp]], labels = sprintf("%2.2f", conf[[supp]]))
+    paste0("For supplement ", supp, ", the tooth growth is between ", 
+           sprintf("%2.2f", conf[[supp]][1]), " and ", 
+           sprintf("%2.2f", conf[[supp]][2]), " with 95% confidence.")
+    })
+```
+
+```r analysis[[1]]``` 
+
+```r analysis[[2]]```
+
+It can be clearly seen that orange juice (OJ) produces greater tooth growth
+compared to ascorbic acid (VC).
 
 # Tooth growth analysis by dose
 
-Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
-State your conclusions and the assumptions needed for your conclusions. 
+Assuming that the tooth growth data is _iid_, the 95% confidence intervals for 
+tooth growth for each dose can be computed with the code below. The plots 
+show the tooth growth for each dose as a histogram.
 
+```{r,echo=TRUE}
+conf <- lapply(split(data, data$dose), function(dataForDose) {
+    lens <- dataForDose$len
+    mean(lens) + c(-1, 1) * qnorm(0.975) * sd(lens) / sqrt(length(lens))
+    })
+analysis <- lapply(names(conf), function(dose) {
+    lens <- data[data$dose == dose, "len"]    
+    h <- hist(lens, breaks = 8, xlim = range(data$len), ylim = range(0, 6.5),              
+              main = paste0("Histogram of tooth growth with dose ", dose, "mg"),
+              xlab = "Tooth Growth", ylab = "Frequency", col = "lightyellow2")
+    xfit <- seq(min(lens), max(lens), length = 40) 
+    yfit <- dnorm(xfit, mean = mean(lens), sd = sd(lens)) 
+    yfit <- yfit * diff(h$mids[1:2]) * length(lens) 
+    lines(xfit, yfit, col = "darkgreen", lt = 1, lw = 3)
+    abline(v = mean(lens), col = "darkred", lt = 2, lw = 2)
+    abline(v = conf[[dose]], col = "darkred", lt = 1, lw = 3)
+    axis(1, font = 2, at = conf[[dose]], labels = sprintf("%2.2f", conf[[dose]]))
+    paste0("For dose ", dose, "mg, the tooth growth is between ", 
+           sprintf("%2.2f", conf[[dose]][1]), " and ", 
+           sprintf("%2.2f", conf[[dose]][2]), " with 95% confidence.")
+    })
+```
 
-Did the student perform some relevant confidence intervals and/or tests?
-Were the results of the tests and/or intervals interpreted in the context of the problem correctly? 
-Did the student describe the assumptions needed for their conclusions?
+```r analysis[[1]]``` 
+
+```r analysis[[2]]``` 
+
+```r analysis[[3]]```
+
+It can be clearly seen that increasing the dose increases the tooth growth.
+
