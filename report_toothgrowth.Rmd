@@ -2,7 +2,7 @@
 title: "Statistical Analysis of the ToothGrowth Data"
 author: "Arun K Viswanathan"
 date: "January 17, 2015"
-output: html_document
+output: pdf_document
 ---
 
 # Overview
@@ -43,20 +43,6 @@ g <- ggplot(data, aes(x = supp, y = len, fill = dose)) +
     xlab("Supplement") +
     ylab("Length of Tooth Growth") +
     guides(fill = guide_legend(title = "Dose"))
-print(g)
-```
-
-An alternate view of the data is to compate tooth growth ranges for each 
-supplement.
-
-```{r, echo=TRUE}
-g <- ggplot(data, aes(x = dose, y = len, fill = supp)) +
-    geom_boxplot() +
-    facet_grid(. ~ supp) + 
-    ggtitle("Tooth Growth by Dose") +
-    xlab("Dose") +
-    ylab("Length of Tooth Growth") +
-    guides(fill = guide_legend(title = "Supplement"))
 print(g)
 ```
 

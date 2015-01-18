@@ -2,7 +2,7 @@
 title: "Statistical Analysis of the Exponential Distribution in R"
 author: "Arun K Viswanathan"
 date: "January 17, 2015"
-output: html_document
+output: pdf_document
 ---
 
 # Overview
