@@ -76,16 +76,21 @@ print(g)
 ````
 
 The histogram below shows the distribution of the _sample means_. The red 
-vertical dashed line is the mean of the sample means and is at `r mean.sim`.
+vertical dashed line is the mean of the sample means and is at `r mean.sim`. A
+normal distribution is overlaid over the histogram in dark green.
 
 ```{r,echo=TRUE}
-g <- ggplot(data.frame(x = means.sim), aes(x = x)) +
-    geom_histogram(aes(fill = ..count..), binwidth = 0.25) +
-    ggtitle("Distribution of sample means") +
-    xlab("Frequency") +
-    ylab("Sample mean") +
-    geom_vline(xintercept = mean.sim, colour = "darkred", linetype = "longdash")
-print(g)
+h <- hist(means.sim, 
+          breaks = 30, 
+          col = "lightyellow2",
+          main = "Distribution of Sample Means",
+          xlab = "Sample Mean",
+          ylab = "Frequency") 
+xfit <- seq(min(means.sim), max(means.sim), length = 40) 
+yfit <- dnorm(xfit, mean = mean.sim, sd = sd(means.sim)) 
+yfit <- yfit * diff(h$mids[1:2]) * length(means.sim) 
+lines(xfit, yfit, col = "darkgreen", lt = 1, lw = 3)
+abline(v = mean.sim, col = "darkred", lt = 2, lw = 3)
 ```
 
 Looking at the histogram above, the distribution of the sample means appears
