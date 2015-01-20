@@ -1,7 +1,7 @@
 ---
 title: "Statistical Analysis of the Exponential Distribution in R"
 author: "Arun K Viswanathan"
-date: "January 17, 2015"
+date: "January 19, 2015"
 output: pdf_document
 ---
 
@@ -24,6 +24,7 @@ and lamda of `r lambda`. The simulation is performed
 simulation in action:
 
 ```{r,echo=TRUE}
+set.seed(20150119) # Seed to ensure reproducibility 
 sim <- matrix(rexp(n * numsim, lambda), numsim) 
 ```
 
@@ -38,10 +39,11 @@ mean.sim <- mean(means.sim)
 mean.error <- abs(mean.sim - mean.theoretical) / mean.theoretical * 100
 ```
 
-The sample mean is **`r format(mean.sim)`** while the theoretical mean is 
-**`r mean.theoretical`**. This is an error of **`r format(mean.error)`%**. This
-clearly shows that the Central Limit Theorem in action as the mean of the
-simulated means is almost the same as the theoretical mean.
+The sample mean is **`r format(mean.sim, digits = 6)`** while the theoretical 
+mean is **`r mean.theoretical`**. This is an error of 
+**`r format(mean.error, digits = 6)`%**. This clearly shows that the Central 
+Limit Theorem in action as the mean of the simulated means is almost the same 
+as the theoretical mean.
 
 # Sample Variance versus Theoretical Variance
 
@@ -56,10 +58,10 @@ var.sim <- sd.sim ^ 2
 var.error <- abs(var.sim - var.theoretical) / var.theoretical * 100
 ```
 
-The average sample variance is **`r format(var.sim)`** (standard deviation of 
-`r format(sd.sim)`) while the theoretical variance is 
+The average sample variance is **`r format(var.sim, digits = 6)`** (standard 
+deviation of `r format(sd.sim, digits = 6)`) while the theoretical variance is 
 **`r var.theoretical`** (standard deviation of `r format(sd.theoretical)`). 
-This is an error of **`r format(var.error)`%** in the variance.
+This is an error of **`r format(var.error, digits = 6)`%** in the variance.
 
 # Distribution
 
